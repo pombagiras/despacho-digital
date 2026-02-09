@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Despacho Digital — Alexia Melusine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --preto: #000;
+  --vinho: #2a0000;
+  --sangue: #5c0000;
+  --rosa: #e6c9c9;
+  --cinza: rgba(255,255,255,0.6);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #120000, #000);
+  color: var(--rosa);
+  font-family: Georgia, "Times New Roman", serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 2s ease;
+}
+
+body.viva {
+  background: radial-gradient(circle at center, var(--vinho), #000);
+}
+
+.container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 520px;
+  padding: 32px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.9rem;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-bottom: 22px;
+}
+
+textarea {
+  width: 100%;
+  height: 120px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--sangue);
+  color: var(--rosa);
+  padding: 12px;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+  transition: all 0.4s ease;
+}
+
+textarea.erro {
+  border-color: #8b0000;
+  animation: alerta 0.4s ease-in-out 2;
+}
+
+@keyframes alerta {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+textarea::placeholder {
+  color: var(--cinza);
+}
+
+button {
+  margin-top: 22px;
+  background: transparent;
+  color: var(--rosa);
+  border: 1px solid var(--sangue);
+  padding: 10px 28px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+button:hover {
+  background: var(--sangue);
+}
+
+#blocoTexto {
+  transition: all 1.5s ease;
+}
+
+.triturar {
+  letter-spacing: 10px;
+  filter: blur(8px);
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.mensagem-final {
+  margin-top: 26px;
+  font-style: italic;
+  font-size: 0.95rem;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.mensagem-final.mostrar {
+  opacity: 1;
+}
+
+.assinatura {
+  margin-top: 44px;
+  font-size: 0.75rem;
+  opacity: 0.55;
+  line-height: 1.4;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Despacho Digital</h1>
+
+  <div class="subtitle">
+    Experiência simbólica. Para deixar ir. Nada é salvo.
+  </div>
+
+  <div id="blocoTexto">
+    <textarea id="texto" placeholder="Escreva aqui o que você deseja deixar para trás..."></textarea>
+  </div>
+
+  <button onclick="entregar()">ENTREGAR</button>
+
+  <div class="mensagem-final" id="mensagemFinal">
+    O que é entregue não precisa mais ser carregado.
+  </div>
+
+  <div class="assinatura">
+    Alexia Melusine<br>
+    O que é entregue não precisa mais ser carregado.
+  </div>
+</div>
+
+<script>
+let chuvaAtiva = false;
+const simbolos = ["🔱","🌹","🔥","🍷","🌙","🕯️","⚰️"];
+
+function criarChuva() {
+  if (!chuvaAtiva) return;
+
+  const s = document.createElement("span");
+  s.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
+  s.style.position = "fixed";
+  s.style.left = Math.random() * 100 + "vw";
+  s.style.top = "-5vh";
+  s.style.fontSize = "16px";
+  s.style.opacity = "0.25";
+  s.style.pointerEvents = "none";
+  s.style.transition = "transform 8s linear, opacity 8s linear";
+  s.style.zIndex = "2";
+
+  document.body.appendChild(s);
+
+  requestAnimationFrame(() => {
+    s.style.transform = "translateY(110vh)";
+    s.style.opacity = "0";
+  });
+
+  setTimeout(() => s.remove(), 8000);
+}
+
+function entregar() {
+  const texto = document.getElementById("texto");
+  const bloco = document.getElementById("blocoTexto");
+  const mensagem = document.getElementById("mensagemFinal");
+
+  if (texto.value.trim() === "") {
+    texto.classList.add("erro");
+    setTimeout(() => texto.classList.remove("erro"), 800);
+    return;
+  }
+
+  document.body.classList.add("viva");
+  bloco.classList.add("triturar");
+
+  if (!chuvaAtiva) {
+    chuvaAtiva = true;
+    setInterval(criarChuva, 1200);
+  }
+
+  setTimeout(() => {
+    bloco.style.display = "none";
+    mensagem.classList.add("mostrar");
+  }, 1500);
+}
+</script>
+
+</body>
+</html>
+
